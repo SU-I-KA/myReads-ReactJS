@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useContext, useEffect, useState } from 'react'
 import { update, get } from '../BooksAPI'
 import { BookContext } from '../context/BookContext'
@@ -31,16 +32,13 @@ const Book = ({ id, title, authors, imageLinks }) => {
     console.log(newShelfedBooks)
   }
 
-  useEffect(
-    () => {
-      const bookAleardyShelfed = books.find((book) => book.id === id)
-      if (bookAleardyShelfed) {
-        setShelf(bookAleardyShelfed?.shelf)
-      }
-      setLoading(false)
-    },
-    [books, id]
-  )
+  useEffect(() => {
+    const bookAleardyShelfed = books.find((book) => book.id === id)
+    if (bookAleardyShelfed) {
+      setShelf(bookAleardyShelfed?.shelf)
+    }
+    setLoading(false)
+  }, [books, id])
 
   return (
     <li>
@@ -75,6 +73,13 @@ const Book = ({ id, title, authors, imageLinks }) => {
       )}
     </li>
   )
+}
+
+Book.propTypes = {
+  id: PropTypes.string,
+  title: PropTypes.string,
+  authors: PropTypes.array,
+  imageLinks: PropTypes.object,
 }
 
 export default Book

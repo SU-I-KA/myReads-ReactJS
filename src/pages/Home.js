@@ -12,7 +12,7 @@ const Home = () => {
 
   return (
     <div className='list-books'>
-      <Helmet title='HOME PAGE' />
+      <Helmet title='HOME - MyReads' />
       <div className='list-books-title'>
         <h1>MyReads</h1>
       </div>

@@ -1,6 +1,7 @@
 import React from 'react'
 import Book from './Book'
 
+import PropTypes from 'prop-types'
 import Loading from './Loading'
 
 const Bookshelf = ({ title, bookList }) => {
@@ -20,6 +21,11 @@ const Bookshelf = ({ title, bookList }) => {
       </div>
     </div>
   )
+}
+
+Bookshelf.propTypes = {
+  title: PropTypes.string,
+  bookList: PropTypes.array,
 }
 
 export default Bookshelf

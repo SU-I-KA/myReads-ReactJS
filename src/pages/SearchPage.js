@@ -1,7 +1,5 @@
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-// import { BookContext } from '../context/BookContext'
 
 import * as BooksAPI from '../BooksAPI'
 
@@ -10,7 +8,6 @@ import Book from '../components/Book'
 
 const SearchPage = () => {
   let navigate = useNavigate()
-  //   const { books } = useContext(BookContext)
 
   const [searchResults, setSearchResults] = useState([])
   const [query, setQuery] = useState('')
@@ -18,46 +15,34 @@ const SearchPage = () => {
 
   const previousQuery = useRef({ query })
 
-  const searchBooks = useCallback(
-    async () => {
-      const results = await BooksAPI.search(query)
-      console.log(results)
-      if (results.error) {
-        setSearchResults(null)
-        setMsg('No Match, Try again')
-        return
-      }
-      setMsg(null)
-      console.log('here we are')
-      setSearchResults(results)
-    },
-    [query]
-  )
-
-  useEffect(
-    () => {
+  useEffect(() => {
+    const timeout = setTimeout(() => {
       if (previousQuery.current.query !== query && query.length > 0) {
-        const timeout = setTimeout(() => {
-          try {
-            searchBooks()
-          } catch (error) {
-            console.log(error)
+        const searchBooks = async () => {
+          const results = await BooksAPI.search(query)
+          if (results.error) {
+            setSearchResults(null)
+            setMsg('No Match, Try again')
+            return
           }
-        }, 250)
-        previousQuery.current = { query }
-        return () => clearTimeout(timeout)
-      } else if (query.length < 1) {
-        setSearchResults(null)
+          setMsg(null)
+          console.log('here we are')
+          setSearchResults(results)
+        }
+
+        searchBooks()
+      } else if (previousQuery.current.query !== query && query.length === 0) {
         setMsg(null)
-        previousQuery.current = { query }
+        setSearchResults(null)
       }
-    },
-    [query, searchBooks]
-  )
+      previousQuery.current = { query }
+    }, 450)
+    return () => clearTimeout(timeout)
+  }, [query])
 
   return (
     <div className='search-books'>
-      <Helmet title='SEARCH PAGE' />
+      <Helmet title='SEARCH - MyReads' />
       <div className='search-books-bar'>
         <button className='close-search' onClick={() => navigate('/')}>
           Close
@@ -72,11 +57,13 @@ const SearchPage = () => {
       </div>
       <div className='search-books-results'>
         <ol className='books-grid'>
-          {searchResults?.length > 0 &&
+          {(searchResults?.length > 0) & (query.length > 0) ? (
             searchResults?.map?.((book) => {
               return <Book {...book} key={book.id} />
-            })}
-          {msg && <h4>{msg}</h4>}
+            })
+          ) : msg ? (
+            <h4>{msg}</h4>
+          ) : null}
         </ol>
       </div>
     </div>
