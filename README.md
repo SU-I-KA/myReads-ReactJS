@@ -2,6 +2,15 @@
 
 This is a bookshelf app that allows you to select and categorize books you have read, are currently reading, or want to read.
 
+## Instructions
+
+- Clone or download the project
+- Run `npm install` in the project root directory to install dependencies
+- Run `npm start` to launch the project.
+- Run `npm test` to launch the test runner in the interactive watch mode.
+- Run `npm run build` to build the app for production to the `build` folder.
+
+
 ## App Functionality
 
 In this application, the main page displays a list of "shelves" (i.e. categories), each of which contains a number of books. The three shelves are:
